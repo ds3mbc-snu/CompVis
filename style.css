@@ -43,9 +43,8 @@ body {
 
 .tool-button {
     min-width: 40px; /* Minimum width for icon only */
-    /* width: 40px; Removed fixed width */
-    /* overflow: hidden; Removed overflow hidden from button */
     transition: width 0.3s ease; /* Smooth transition for width */
+    justify-content: center; /* Center content when only icon */
 }
 
 .rule-button {
@@ -61,12 +60,12 @@ body {
     transition: max-width 0.3s ease, opacity 0.3s ease; /* Smooth transition for text */
 }
 
-.tool-button.active {
-    width: auto; /* Expand width when active */
+.tool-button:hover, .tool-button.active {
+    width: auto; /* Expand width on hover or when active */
 }
 
-.tool-button.active span {
-    max-width: 100px; /* Show text when active (adjust as needed) */
+.tool-button:hover span, .tool-button.active span {
+    max-width: 100px; /* Show text on hover or when active (adjust as needed) */
     opacity: 1; /* Make text visible */
 }
 

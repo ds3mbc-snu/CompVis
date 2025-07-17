@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM & State ---
     const toolButtons = document.querySelectorAll('.tool-button');
+    const ruleButtons = document.querySelectorAll('.rule-button');
     let currentTool = 'select'; // Default tool
     let nodeCounter = 1;
 
@@ -514,7 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update current tool state
             currentTool = button.id.replace('-tool', '');
             console.log(`Tool changed to: ${currentTool}`);
-            updateToolDescription(currentTool); // Update description
+            updateToolDescription(currentTool); // Update description and keep it fixed
 
             // Activate vis.js specific modes
             if (currentTool === 'add-node') {
@@ -525,13 +526,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 leftNetwork.disableEditMode(); // Disable any active edit modes for other tools
             }
         });
-    });
 
+        button.addEventListener('mouseover', () => {
+            const toolId = button.id.replace('-tool', '');
+            updateToolDescription(toolId); // Show description on hover
+        });
+
+        button.addEventListener('mouseout', () => {
+            // If the button is not the currently active tool, clear the description
+            if (button.id.replace('-tool', '') !== currentTool) {
+                toolDescriptionDisplay.textContent = '';
+            }
+        });
+    });
     const mStepControls = document.getElementById('m-step-controls');
     const mStepInput = document.getElementById('m-step-input');
 
     // 2. Rule selection
-    const ruleButtons = document.querySelectorAll('.rule-button');
     ruleButtons.forEach(button => {
         button.addEventListener('click', () => {
             // Update active button style
@@ -540,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update current rule state
             currentUndirectedRule = button.id.replace('rule-', '').replace('-button', '').toLowerCase();
             console.log(`Rule changed to: ${currentUndirectedRule}`);
-            updateRuleDescription(currentUndirectedRule); // Update description
+            updateRuleDescription(currentUndirectedRule); // Update description and keep it fixed
 
             // Show/hide m-STEP controls
             if (currentUndirectedRule === 'm-step') {
@@ -550,6 +561,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             updateUndirectedGraphDisplay(); // Update undirected graph with new rule
+        });
+
+        button.addEventListener('mouseover', () => {
+            const ruleId = button.id.replace('rule-', '').replace('-button', '').toLowerCase();
+            updateRuleDescription(ruleId); // Show description on hover
+        });
+
+        button.addEventListener('mouseout', () => {
+            // If the button is not the currently active rule, clear the description
+            if (button.id.replace('rule-', '').replace('-button', '').toLowerCase() !== currentUndirectedRule) {
+                ruleDescriptionDisplay.textContent = '';
+            }
         });
     });
 
@@ -687,7 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Clear Button ---    
     const clearButton = document.getElementById('clear-tool');
     clearButton.addEventListener('click', () => {
-        if (confirm("Are you sure you want to clear all graph data?")) {
+                if (confirm("Are you sure you want to clear all graph data?")) {
             leftNodes.clear();
             leftEdges.clear();
             undirectedNodes.clear();
@@ -706,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const generateRandomButton = document.getElementById('generate-random-button');
 
     generateRandomButton.addEventListener('click', () => {
-        const numNodesStr = prompt("생성할 꼭짓점의 개수를 입력하세요 (양의 정수):", "5");
+        const numNodesStr = prompt("Enter the number of vertices to generate (positive integer):", "5");
         if (numNodesStr === null) return; // User cancelled
 
         const numNodes = parseInt(numNodesStr, 10);
@@ -769,6 +792,35 @@ document.addEventListener('DOMContentLoaded', () => {
         leftNetwork.fit(); // Fit the graph to the view
         rightNetwork.fit(); // Fit the right graph to the view
         console.log(`Generated random graph with ${numNodes} nodes.`);
+        updateToolDescription(currentTool); // Update description after random graph generation
+    });
+
+    // Add event listeners for random, import, and export buttons
+    generateRandomButton.addEventListener('mouseover', () => {
+        updateToolDescription('generate-random');
+    });
+    generateRandomButton.addEventListener('mouseout', () => {
+        if (currentTool !== 'generate-random') {
+            toolDescriptionDisplay.textContent = '';
+        }
+    });
+
+    importButton.addEventListener('mouseover', () => {
+        updateToolDescription('import');
+    });
+    importButton.addEventListener('mouseout', () => {
+        if (currentTool !== 'import') {
+            toolDescriptionDisplay.textContent = '';
+        }
+    });
+
+    exportButton.addEventListener('mouseover', () => {
+        updateToolDescription('export');
+    });
+    exportButton.addEventListener('mouseout', () => {
+        if (currentTool !== 'export') {
+            toolDescriptionDisplay.textContent = '';
+        }
     });
 
     importButton.addEventListener('click', () => {
