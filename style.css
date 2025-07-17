@@ -38,12 +38,13 @@ body {
     border-radius: 4px;
     display: inline-flex;
     align-items: center;
-    /* gap: 8px; */ /* Removed gap */
+    gap: 8px; /* Re-added gap for consistent spacing */
 }
 
 .tool-button {
-    width: 40px; /* Fixed width for icon only */
-    overflow: hidden; /* Hide overflowing text */
+    min-width: 40px; /* Minimum width for icon only */
+    /* width: 40px; Removed fixed width */
+    /* overflow: hidden; Removed overflow hidden from button */
     transition: width 0.3s ease; /* Smooth transition for width */
 }
 
@@ -53,7 +54,11 @@ body {
 }
 
 .tool-button span {
-    display: none; /* Hide text by default */
+    max-width: 0; /* Hide text by default */
+    opacity: 0;
+    overflow: hidden; /* Ensure text is hidden */
+    white-space: nowrap; /* Prevent text wrapping */
+    transition: max-width 0.3s ease, opacity 0.3s ease; /* Smooth transition for text */
 }
 
 .tool-button.active {
@@ -61,8 +66,8 @@ body {
 }
 
 .tool-button.active span {
-    display: inline; /* Show text when active */
-    margin-left: 8px; /* Add space between icon and text when active */
+    max-width: 100px; /* Show text when active (adjust as needed) */
+    opacity: 1; /* Make text visible */
 }
 
 .tool-button.active, .rule-button.active {
