@@ -663,19 +663,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportButton = document.getElementById('export-button');
     const importFileInput = document.getElementById('import-file-input');
 
-    // --- Clear Button ---
-    const clearButton = document.getElementById('clear-tool');
-    clearButton.addEventListener('click', () => {
-        if (confirm("정말로 모든 그래프를 초기화하시겠습니까?")) {
-            leftNodes.clear();
-            leftEdges.clear();
-            undirectedNodes.clear();
-            undirectedEdges.clear();
-            nodeCounter = 1;
-            console.log("Graphs cleared.");
-        }
-    });
-
     // --- Random Graph Generation Button ---
     const generateRandomButton = document.getElementById('generate-random-button');
 
