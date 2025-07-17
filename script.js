@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM & State ---
     const toolButtons = document.querySelectorAll('.tool-button');
-    const ruleButtons = document.querySelectorAll('.rule-button');
     let currentTool = 'select'; // Default tool
     let nodeCounter = 1;
 
@@ -489,13 +488,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const ruleDescriptions = {
-        'comp': 'Competition graph: Connects two vertices if they compete, that is, they have a common prey.',
-        'ce': 'Common-enemy graph: Connects two vertices if they have a common predator.',
-        'cce': 'Competition Common-enemy graph: Connects two vertices if they have both a common prey and a common predator.',
-        'niche': 'Niche graph: Connects two vertices if they have a common prey OR a common predator.',
-        'phy': 'Phylogeny graph: Connects two vertices if they compete OR there exists an arc  between them.',
-        'one-two-step': 'Connects two vertices if they compete or (1,2)-compete.',
-        'm-step': 'Connects two vertices if they have a common m-step prey.'
+        'comp': 'Competition Graph: Connects two vertices if they compete, that is, they have a common prey.',
+        'ce': 'Common-Enemy Graph: Connects two vertices if they have a common predator.',
+        'cce': 'Competition Common-Enemy Graph: Connects two vertices if they have both a common prey and a common predator.',
+        'niche': 'Niche Graph: Connects two vertices if they have a common prey OR a common predator.',
+        'phy': 'Phylogeny Graph: Connects two vertices if they compete OR there exists an arc  between them.',
+        'one-two-step': '(1,2)-step Competition Graph: Connects two vertices if they compete or (1,2)-compete.',
+        'm-step': 'm-step Competition Graph: Connects two vertices if they have a common m-step prey.'
     };
 
     function updateToolDescription(toolId) {
@@ -539,10 +538,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
     const mStepControls = document.getElementById('m-step-controls');
     const mStepInput = document.getElementById('m-step-input');
 
     // 2. Rule selection
+    const ruleButtons = document.querySelectorAll('.rule-button');
     ruleButtons.forEach(button => {
         button.addEventListener('click', () => {
             // Update active button style
@@ -551,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update current rule state
             currentUndirectedRule = button.id.replace('rule-', '').replace('-button', '').toLowerCase();
             console.log(`Rule changed to: ${currentUndirectedRule}`);
-            updateRuleDescription(currentUndirectedRule); // Update description and keep it fixed
+            updateRuleDescription(currentUndirectedRule); // Update description
 
             // Show/hide m-STEP controls
             if (currentUndirectedRule === 'm-step') {
@@ -561,18 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             updateUndirectedGraphDisplay(); // Update undirected graph with new rule
-        });
-
-        button.addEventListener('mouseover', () => {
-            const ruleId = button.id.replace('rule-', '').replace('-button', '').toLowerCase();
-            updateRuleDescription(ruleId); // Show description on hover
-        });
-
-        button.addEventListener('mouseout', () => {
-            // If the button is not the currently active rule, clear the description
-            if (button.id.replace('rule-', '').replace('-button', '').toLowerCase() !== currentUndirectedRule) {
-                ruleDescriptionDisplay.textContent = '';
-            }
         });
     });
 
@@ -710,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Clear Button ---    
     const clearButton = document.getElementById('clear-tool');
     clearButton.addEventListener('click', () => {
-                if (confirm("Are you sure you want to clear all graph data?")) {
+        if (confirm("Are you sure you want to clear all graph data?")) {
             leftNodes.clear();
             leftEdges.clear();
             undirectedNodes.clear();
@@ -795,33 +784,11 @@ document.addEventListener('DOMContentLoaded', () => {
         updateToolDescription(currentTool); // Update description after random graph generation
     });
 
-    // Add event listeners for random, import, and export buttons
-    generateRandomButton.addEventListener('mouseover', () => {
-        updateToolDescription('generate-random');
-    });
-    generateRandomButton.addEventListener('mouseout', () => {
-        if (currentTool !== 'generate-random') {
-            toolDescriptionDisplay.textContent = '';
-        }
+    importButton.addEventListener('click', () => {
+        importFileInput.click();
     });
 
-    importButton.addEventListener('mouseover', () => {
-        updateToolDescription('import');
-    });
-    importButton.addEventListener('mouseout', () => {
-        if (currentTool !== 'import') {
-            toolDescriptionDisplay.textContent = '';
-        }
-    });
-
-    exportButton.addEventListener('mouseover', () => {
-        updateToolDescription('export');
-    });
-    exportButton.addEventListener('mouseout', () => {
-        if (currentTool !== 'export') {
-            toolDescriptionDisplay.textContent = '';
-        }
-    });
+    
 
     importButton.addEventListener('click', () => {
         importFileInput.click();
