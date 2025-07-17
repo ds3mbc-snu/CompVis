@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0; /* Prevents flexbox from overflowing */
+}
+
+#toolbar, #rule-selection-toolbar {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+}
+
+.tool-button, .rule-button {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.tool-button.active, .rule-button.active {
+    background-color: #e0e0e0;
+    border-color: #999;
+}
+
+.panel {
+    flex: 1;
+    border: 2px solid #ccc; /* Increased border thickness and color */
+    margin: 5px;
+    background-color: #f9f9f9;
+    position: relative; /* For vis.js canvas */
+    min-height: 0; /* Helps flexbox calculate shrinking sizes correctly */
+}
+
+/* Vis.js specific styles */
+.vis-network {
+    width: 100%;
+    height: 100%;
+    border: none; /* Remove default vis.js border */
+}
