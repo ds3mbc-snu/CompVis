@@ -663,6 +663,75 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportButton = document.getElementById('export-button');
     const importFileInput = document.getElementById('import-file-input');
 
+    // --- Random Graph Generation Button ---
+    const generateRandomButton = document.getElementById('generate-random-button');
+
+    generateRandomButton.addEventListener('click', () => {
+        const numNodesStr = prompt("생성할 꼭짓점의 개수를 입력하세요 (양의 정수):", "5");
+        if (numNodesStr === null) return; // User cancelled
+
+        const numNodes = parseInt(numNodesStr, 10);
+
+        if (isNaN(numNodes) || numNodes <= 0 || !Number.isInteger(numNodes)) {
+            alert("유효한 양의 정수를 입력해주세요.");
+            return;
+        }
+
+        // Clear existing graphs
+        leftNodes.clear();
+        leftEdges.clear();
+        undirectedNodes.clear();
+        undirectedEdges.clear();
+        nodeCounter = 1; // Reset node counter
+
+        // Generate nodes
+        const newNodes = [];
+        const canvasWidth = leftContainer.clientWidth;
+        const canvasHeight = leftContainer.clientHeight;
+        const centerX = canvasWidth / 2;
+        const centerY = canvasHeight / 2;
+        const radius = Math.min(canvasWidth, canvasHeight) / 3; // Adjust radius as needed
+
+        for (let i = 0; i < numNodes; i++) {
+            const nodeId = new Date().getTime() + i; // Ensure unique ID
+            // Calculate angle: start at top (PI/2) and go counter-clockwise
+            const angle = Math.PI / 2 + (i * 2 * Math.PI / numNodes);
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY - radius * Math.sin(angle); // Invert y-axis for counter-clockwise visual
+
+            newNodes.push({
+                id: nodeId,
+                label: `v${nodeCounter++}`,
+                x: x,
+                y: y
+            });
+        }
+        leftNodes.add(newNodes);
+
+        // Generate acyclic directed edges (i -> j only if i < j)
+        const newEdges = [];
+        const nodeIds = newNodes.map(node => node.id);
+        const edgeProbability = 0.5;
+
+        for (let i = 0; i < numNodes; i++) {
+            for (let j = i + 1; j < numNodes; j++) {
+                if (Math.random() < edgeProbability) {
+                    newEdges.push({
+                        from: nodeIds[i],
+                        to: nodeIds[j],
+                        arrows: 'to'
+                    });
+                }
+            }
+        }
+        leftEdges.add(newEdges);
+
+        updateUndirectedGraphDisplay(); // Update right panel
+        leftNetwork.fit(); // Fit the graph to the view
+        rightNetwork.fit(); // Fit the right graph to the view
+        console.log(`Generated random graph with ${numNodes} nodes.`);
+    });
+
     exportButton.addEventListener('click', () => {
         if (confirm("현재 그래프 데이터를 JSON 파일로 내보내시겠습니까?")) {
             const data = {
