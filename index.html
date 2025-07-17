@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Competition Graph Visualizer</title>
@@ -12,15 +12,16 @@
     <div id="main-container">
         <div class="column">
             <div id="toolbar">
-                <button id="select-tool" class="tool-button active"><i class="fas fa-mouse-pointer"></i> <span>선택</span></button>
-                <button id="add-node-tool" class="tool-button"><i class="fas fa-circle-plus"></i> <span>Vertex 생성</span></button>
-                <button id="add-edge-tool" class="tool-button"><i class="fas fa-share-nodes"></i> <span>Arc 생성</span></button>
-                <button id="generate-random-button" class="tool-button"><i class="fas fa-random"></i> <span>랜덤 생성</span></button>
-                <button id="delete-tool" class="tool-button"><i class="fas fa-trash"></i> <span>삭제</span></button>
-                <button id="clear-tool" class="tool-button"><i class="fas fa-eraser"></i> <span>초기화</span></button>
-                <button id="import-button" class="tool-button"><i class="fas fa-file-import"></i> <span>불러오기</span></button>
-                <button id="export-button" class="tool-button"><i class="fas fa-file-export"></i> <span>내보내기</span></button>
+                <button id="select-tool" class="tool-button active"><i class="fas fa-mouse-pointer"></i> <span>Select</span></button>
+                <button id="add-node-tool" class="tool-button"><i class="fas fa-circle-plus"></i> <span>Add Vertex</span></button>
+                <button id="add-edge-tool" class="tool-button"><i class="fas fa-share-nodes"></i> <span>Add Arc</span></button>
+                <button id="generate-random-button" class="tool-button"><i class="fas fa-random"></i> <span>Random Gen</span></button>
+                <button id="delete-tool" class="tool-button"><i class="fas fa-trash"></i> <span>Delete</span></button>
+                <button id="clear-tool" class="tool-button"><i class="fas fa-eraser"></i> <span>Clear</span></button>
+                <button id="import-button" class="tool-button"><i class="fas fa-file-import"></i> <span>Import</span></button>
+                <button id="export-button" class="tool-button"><i class="fas fa-file-export"></i> <span>Export</span></button>
             </div>
+            <div id="tool-description-display" class="description-display"></div>
             <input type="file" id="import-file-input" style="display: none;" accept=".json">
             <div id="left-panel" class="panel"></div>
         </div>
@@ -38,6 +39,7 @@
                     <input type="number" id="m-step-input" value="1" min="1" style="width: 40px;">
                 </div>
             </div>
+            <div id="rule-description-display" class="description-display"></div>
             <div id="right-panel" class="panel"></div>
         </div>
     </div>

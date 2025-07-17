@@ -472,6 +472,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const rightData = { nodes: undirectedNodes, edges: undirectedEdges };
     const rightNetwork = new vis.Network(rightContainer, rightData, rightOptions);
 
+    // --- Description Displays ---
+    const toolDescriptionDisplay = document.getElementById('tool-description-display');
+    const ruleDescriptionDisplay = document.getElementById('rule-description-display');
+
+    const toolDescriptions = {
+        'select': 'Select and drag vertices and arcs.',
+        'add-node': 'Create a new vertex at the clicked position.',
+        'add-edge': 'Click two vertices to create an arc.',
+        'generate-random': 'Generate a random acyclic digraph with a specified number of vertices.',
+        'delete': 'Click a vertex or arc to delete it.',
+        'clear': 'Clear all graph data.',
+        'import': 'Load graph data from a JSON file.',
+        'export': 'Export current graph data to a JSON file.'
+    };
+
+    const ruleDescriptions = {
+        'comp': 'Competition graph: Connects two vertices if they compete, that is, they have a common prey.',
+        'ce': 'Common-enemy graph: Connects two vertices if they have a common predator.',
+        'cce': 'Competition Common-enemy graph: Connects two vertices if they have both a common prey and a common predator.',
+        'niche': 'Niche graph: Connects two vertices if they have a common prey OR a common predator.',
+        'phy': 'Phylogeny graph: Connects two vertices if they compete OR there exists an arc  between them.',
+        'one-two-step': 'Connects two vertices if they compete or (1,2)-compete.',
+        'm-step': 'Connects two vertices if they have a common m-step prey.'
+    };
+
+    function updateToolDescription(toolId) {
+        toolDescriptionDisplay.textContent = toolDescriptions[toolId] || '';
+    }
+
+    function updateRuleDescription(ruleId) {
+        ruleDescriptionDisplay.textContent = ruleDescriptions[ruleId] || '';
+    }
+
     // 1. Tool selection
     toolButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -481,6 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update current tool state
             currentTool = button.id.replace('-tool', '');
             console.log(`Tool changed to: ${currentTool}`);
+            updateToolDescription(currentTool); // Update description
 
             // Activate vis.js specific modes
             if (currentTool === 'add-node') {
@@ -506,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update current rule state
             currentUndirectedRule = button.id.replace('rule-', '').replace('-button', '').toLowerCase();
             console.log(`Rule changed to: ${currentUndirectedRule}`);
+            updateRuleDescription(currentUndirectedRule); // Update description
 
             // Show/hide m-STEP controls
             if (currentUndirectedRule === 'm-step') {
@@ -524,6 +559,10 @@ document.addEventListener('DOMContentLoaded', () => {
             updateUndirectedGraphDisplay();
         }
     });
+
+    // Set initial descriptions
+    updateToolDescription(currentTool);
+    updateRuleDescription(currentUndirectedRule);
 
     // 2. Handle clicks on LEFT panel based on currentTool
     let firstNode = null; // For arc creation
@@ -648,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Clear Button ---    
     const clearButton = document.getElementById('clear-tool');
     clearButton.addEventListener('click', () => {
-        if (confirm("정말로 모든 그래프를 초기화하시겠습니까?")) {
+        if (confirm("Are you sure you want to clear all graph data?")) {
             leftNodes.clear();
             leftEdges.clear();
             undirectedNodes.clear();
@@ -665,6 +704,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Random Graph Generation Button ---
     const generateRandomButton = document.getElementById('generate-random-button');
+
+    generateRandomButton.addEventListener('click', () => {
+        const numNodesStr = prompt("생성할 꼭짓점의 개수를 입력하세요 (양의 정수):", "5");
+        if (numNodesStr === null) return; // User cancelled
+
+        const numNodes = parseInt(numNodesStr, 10);
+
+        if (isNaN(numNodes) || numNodes <= 0 || !Number.isInteger(numNodes)) {
+            alert("Please enter a valid positive integer.");
+            return;
+        }
+
+        // Clear existing graphs
+        leftNodes.clear();
+        leftEdges.clear();
+        undirectedNodes.clear();
+        undirectedEdges.clear();
+        nodeCounter = 1; // Reset node counter
+
+        // Generate nodes
+        const newNodes = [];
+        const canvasWidth = leftContainer.clientWidth;
+        const canvasHeight = leftContainer.clientHeight;
+        const centerX = canvasWidth / 2;
+        const centerY = canvasHeight / 2;
+        const radius = Math.min(canvasWidth, canvasHeight) / 3; // Adjust radius as needed
+
+        for (let i = 0; i < numNodes; i++) {
+            const nodeId = new Date().getTime() + i; // Ensure unique ID
+            // Calculate angle: start at top (PI/2) and go counter-clockwise
+            const angle = Math.PI / 2 + (i * 2 * Math.PI / numNodes);
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY - radius * Math.sin(angle); // Invert y-axis for counter-clockwise visual
+
+            newNodes.push({
+                id: nodeId,
+                label: `v${nodeCounter++}`,
+                x: x,
+                y: y
+            });
+        }
+        leftNodes.add(newNodes);
+
+        // Generate acyclic directed edges (i -> j only if i < j)
+        const newEdges = [];
+        const nodeIds = newNodes.map(node => node.id);
+        const edgeProbability = 0.5;
+
+        for (let i = 0; i < numNodes; i++) {
+            for (let j = i + 1; j < numNodes; j++) {
+                if (Math.random() < edgeProbability) {
+                    newEdges.push({
+                        from: nodeIds[i],
+                        to: nodeIds[j],
+                        arrows: 'to'
+                    });
+                }
+            }
+        }
+        leftEdges.add(newEdges);
+
+        updateUndirectedGraphDisplay(); // Update right panel
+        leftNetwork.fit(); // Fit the graph to the view
+        rightNetwork.fit(); // Fit the right graph to the view
+        console.log(`Generated random graph with ${numNodes} nodes.`);
+    });
 
     importButton.addEventListener('click', () => {
         importFileInput.click();
