@@ -30,10 +30,38 @@ body {
 
 .tool-button, .rule-button {
     padding: 8px 15px;
+    font-size: 14px;
+    text-align: center;
     border: 1px solid #ccc;
     background-color: #fff;
     cursor: pointer;
     border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tool-button {
+    width: 40px; /* Fixed width for icon only */
+    overflow: hidden; /* Hide overflowing text */
+    transition: width 0.3s ease; /* Smooth transition for width */
+}
+
+.rule-button {
+    min-width: 60px; /* Ensure minimum width for text buttons */
+    justify-content: center; /* Center text */
+}
+
+.tool-button span {
+    display: none; /* Hide text by default */
+}
+
+.tool-button.active {
+    width: auto; /* Expand width when active */
+}
+
+.tool-button.active span {
+    display: inline; /* Show text when active */
 }
 
 .tool-button.active, .rule-button.active {

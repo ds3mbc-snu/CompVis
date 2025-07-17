@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Graph Tool</title>
+    <title>Competition Graph Visualizer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
@@ -10,21 +11,25 @@
     <div id="main-container">
         <div class="column">
             <div id="toolbar">
-                <button id="select-tool" class="tool-button active">선택</button>
-                <button id="add-node-tool" class="tool-button">Vertex 생성</button>
-                <button id="add-edge-tool" class="tool-button">Arc 생성</button>
-                <button id="delete-tool" class="tool-button">삭제</button>
-                <button id="clear-tool" class="tool-button">Clear</button>
+                <button id="select-tool" class="tool-button active"><i class="fas fa-mouse-pointer"></i> <span>선택</span></button>
+                <button id="add-node-tool" class="tool-button"><i class="fas fa-circle-plus"></i> <span>Vertex 생성</span></button>
+                <button id="add-edge-tool" class="tool-button"><i class="fas fa-share-nodes"></i> <span>Arc 생성</span></button>
+                <button id="delete-tool" class="tool-button"><i class="fas fa-trash"></i> <span>삭제</span></button>
+                <button id="clear-tool" class="tool-button"><i class="fas fa-eraser"></i> <span>초기화</span></button>
+                <button id="import-button" class="tool-button"><i class="fas fa-file-import"></i> <span>불러오기</span></button>
+                <button id="export-button" class="tool-button"><i class="fas fa-file-export"></i> <span>내보내기</span></button>
             </div>
+            <input type="file" id="import-file-input" style="display: none;" accept=".json">
             <div id="left-panel" class="panel"></div>
         </div>
         <div class="column">
             <div id="rule-selection-toolbar">
-                <button id="rule-comp-button" class="rule-button active">comp</button>
-                <button id="rule-ce-button" class="rule-button">ce</button>
-                <button id="rule-cce-button" class="rule-button">cce</button>
-                <button id="rule-niche-button" class="rule-button">niche</button>
-                <button id="rule-phy-button" class="rule-button">phy</button>
+                <button id="rule-comp-button" class="rule-button active">COMP</button>
+                <button id="rule-ce-button" class="rule-button">CE</button>
+                <button id="rule-cce-button" class="rule-button">CCE</button>
+                <button id="rule-niche-button" class="rule-button">NICHE</button>
+                <button id="rule-phy-button" class="rule-button">PHY</button>
+                <button id="rule-one-two-step-button" class="rule-button">(1,2)-STEP</button>
                 <button id="rule-m-step-button" class="rule-button">m-step</button>
                 <div id="m-step-controls" style="display: none;">
                     <label for="m-step-input">m=</label>
