@@ -9,38 +9,106 @@
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
-    <div id="main-container">
-        <div class="column">
-            <div id="toolbar">
-                <button id="select-tool" class="tool-button active"><i class="fas fa-mouse-pointer"></i> <span>Select</span></button>
-                <button id="add-node-tool" class="tool-button"><i class="fas fa-circle-plus"></i> <span>Add Vertex</span></button>
-                <button id="add-edge-tool" class="tool-button"><i class="fas fa-share-nodes"></i> <span>Add Arc</span></button>
-                <button id="generate-random-button" class="tool-button"><i class="fas fa-random"></i> <span>Random</span></button>
-                <button id="delete-tool" class="tool-button"><i class="fas fa-trash"></i> <span>Delete</span></button>
-                <button id="clear-tool" class="tool-button"><i class="fas fa-eraser"></i> <span>Clear</span></button>
-                <button id="import-button" class="tool-button"><i class="fas fa-file-import"></i> <span>Import</span></button>
-                <button id="export-button" class="tool-button"><i class="fas fa-file-export"></i> <span>Export</span></button>
-            </div>
-            <div id="tool-description-display" class="description-display"></div>
-            <input type="file" id="import-file-input" style="display: none;" accept=".json">
-            <div id="left-panel" class="panel"></div>
-        </div>
-        <div class="column">
-            <div id="rule-selection-toolbar">
-                <button id="rule-comp-button" class="rule-button active">COMP</button>
-                <button id="rule-ce-button" class="rule-button">CE</button>
-                <button id="rule-cce-button" class="rule-button">CCE</button>
-                <button id="rule-niche-button" class="rule-button">NICHE</button>
-                <button id="rule-phy-button" class="rule-button">PHY</button>
-                <button id="rule-one-two-step-button" class="rule-button">(1,2)-STEP</button>
-                <button id="rule-m-step-button" class="rule-button">m-STEP</button>
-                <div id="m-step-controls" style="display: none;">
-                    <label for="m-step-input">m=</label>
-                    <input type="number" id="m-step-input" value="1" min="1" style="width: 40px;">
+    <div id="app-container">
+        <!-- Main Page -->
+        <div id="main-page" class="page-content active">
+            <div class="main-page-container">
+                <h1>Competition Graph Visualizer</h1>
+                <p>A web-based tool for visualizing and studying various types of competition graphs and tournaments.</p>
+                <div class="navigation-buttons">
+                    <button class="nav-button" data-page="visualizer-page">Open Visualizer</button>
+                    <button class="nav-button" data-page="competitive-page">Open Competitive Tool</button>
                 </div>
             </div>
-            <div id="rule-description-display" class="description-display"></div>
-            <div id="right-panel" class="panel"></div>
+        </div>
+
+        <!-- Visualizer Page -->
+        <div id="visualizer-page" class="page-content">
+            <div id="main-container">
+                 <div class="column">
+                    <div id="toolbar">
+                        <button class="back-button" data-page="main-page"><i class="fas fa-arrow-left"></i> <span>Home</span></button>
+                        <button id="select-tool" class="tool-button active"><i class="fas fa-mouse-pointer"></i> <span>Select</span></button>
+                        <button id="add-node-tool" class="tool-button"><i class="fas fa-circle-plus"></i> <span>Add Vertex</span></button>
+                        <button id="add-edge-tool" class="tool-button"><i class="fas fa-share-nodes"></i> <span>Add Arc</span></button>
+                        <button id="generate-random-button" class="tool-button"><i class="fas fa-random"></i> <span>Random</span></button>
+                        <button id="delete-tool" class="tool-button"><i class="fas fa-trash"></i> <span>Delete</span></button>
+                        <button id="clear-tool" class="tool-button"><i class="fas fa-eraser"></i> <span>Clear</span></button>
+                        <button id="import-button" class="tool-button"><i class="fas fa-file-import"></i> <span>Import</span></button>
+                        <button id="export-button" class="tool-button"><i class="fas fa-file-export"></i> <span>Export</span></button>
+                    </div>
+                    <div id="tool-description-display" class="description-display"></div>
+                    <input type="file" id="import-file-input" style="display: none;" accept=".json">
+                    <div id="left-panel" class="panel"></div>
+                </div>
+                <div class="column">
+                    <div id="rule-selection-toolbar">
+                        <button id="rule-comp-button" class="rule-button active">COMP</button>
+                        <button id="rule-ce-button" class="rule-button">CE</button>
+                        <button id="rule-cce-button" class="rule-button">CCE</button>
+                        <button id="rule-niche-button" class="rule-button">NICHE</button>
+                        <button id="rule-phy-button" class="rule-button">PHY</button>
+                        <button id="rule-one-two-step-button" class="rule-button">(1,2)-STEP</button>
+                        <button id="rule-m-step-button" class="rule-button">m-STEP</button>
+                        <div id="m-step-controls" style="display: none;">
+                            <label for="m-step-input">m=</label>
+                            <input type="number" id="m-step-input" value="1" min="1" style="width: 40px;">
+                        </div>
+                        <button id="rule-p-comp-button" class="rule-button">p-COMP</button>
+                        <div id="p-comp-controls" style="display: none;">
+                            <label for="p-comp-input">p=</label>
+                            <input type="number" id="p-comp-input" value="2" min="2" style="width: 40px;">
+                        </div>
+                    </div>
+                    <div id="rule-description-display" class="description-display"></div>
+                    <div id="right-panel" class="panel"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Competitive Page -->
+        <div id="competitive-page" class="page-content">
+            <div id="competitive-main-container">
+                <div class="column">
+                    <div id="competitive-toolbar">
+                        <button class="back-button" data-page="main-page"><i class="fas fa-arrow-left"></i> <span>Home</span></button>
+                        <button id="competitive-select-tool" class="tool-button active"><i class="fas fa-mouse-pointer"></i> <span>Select</span></button>
+                        <button id="competitive-add-node-tool" class="tool-button"><i class="fas fa-circle-plus"></i> <span>Add Vertex</span></button>
+                        <button id="competitive-add-edge-tool" class="tool-button"><i class="fas fa-share-nodes"></i> <span>Add Arc</span></button>
+                        <button id="competitive-generate-random-button" class="tool-button"><i class="fas fa-random"></i> <span>Random</span></button>
+                        <button id="competitive-generate-tournament-button" class="tool-button"><i class="fas fa-sitemap"></i> <span>Tournament</span></button>
+                        <button id="competitive-delete-tool" class="tool-button"><i class="fas fa-trash"></i> <span>Delete</span></button>
+                        <button id="competitive-clear-tool" class="tool-button"><i class="fas fa-eraser"></i> <span>Clear</span></button>
+                        <button id="competitive-import-button" class="tool-button"><i class="fas fa-file-import"></i> <span>Import</span></button>
+                        <button id="competitive-export-button" class="tool-button"><i class="fas fa-file-export"></i> <span>Export</span></button>
+                    </div>
+                    <div id="competitive-tool-description-display" class="description-display"></div>
+                    <input type="file" id="competitive-import-file-input" style="display: none;" accept=".json">
+                    <div id="competitive-left-panel" class="panel"></div>
+                </div>
+                <div class="column">
+                    <div id="competitive-rule-selection-toolbar">
+                        <button id="competitive-rule-comp-button" class="rule-button active">COMP</button>
+                        <button id="competitive-rule-ce-button" class="rule-button">CE</button>
+                        <button id="competitive-rule-cce-button" class="rule-button">CCE</button>
+                        <button id="competitive-rule-niche-button" class="rule-button">NICHE</button>
+                        <button id="competitive-rule-phy-button" class="rule-button">PHY</button>
+                        <button id="competitive-rule-one-two-step-button" class="rule-button">(1,2)-STEP</button>
+                        <button id="competitive-rule-m-step-button" class="rule-button">m-STEP</button>
+                        <div id="competitive-m-step-controls" style="display: none;">
+                            <label for="competitive-m-step-input">m=</label>
+                            <input type="number" id="competitive-m-step-input" value="1" min="1" style="width: 40px;">
+                        </div>
+                        <button id="competitive-rule-p-comp-button" class="rule-button">p-COMP</button>
+                        <div id="competitive-p-comp-controls" style="display: none;">
+                            <label for="competitive-p-comp-input">p=</label>
+                            <input type="number" id="competitive-p-comp-input" value="2" min="2" style="width: 40px;">
+                        </div>
+                    </div>
+                    <div id="competitive-rule-description-display" class="description-display"></div>
+                    <div id="competitive-right-panel" class="panel"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

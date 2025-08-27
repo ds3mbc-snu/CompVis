@@ -6,29 +6,76 @@ body {
     overflow: hidden;
 }
 
-#main-container {
+#app-container {
+    height: 100%;
+}
+
+.page-content {
+    display: none;
+    height: 100%;
+    width: 100%;
+}
+
+.page-content.active {
+    display: block;
+}
+
+/* Main Page Styles */
+#main-page .main-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+
+#main-page h1 {
+    font-size: 3em;
+}
+
+#main-page p {
+    font-size: 1.2em;
+    color: #555;
+    max-width: 600px;
+}
+
+.navigation-buttons .nav-button {
+    font-size: 1.1em;
+    padding: 15px 30px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+}
+
+/* Visualizer/Competitive Page Styles */
+#main-container, #competitive-main-container {
     display: flex;
     flex-direction: row;
     height: 100%;
+    width: 100%;
 }
 
 .column {
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-width: 0; /* Prevents flexbox from overflowing */
+    min-width: 0;
 }
 
-#toolbar, #rule-selection-toolbar {
+#toolbar, #rule-selection-toolbar, 
+#competitive-toolbar, #competitive-rule-selection-toolbar {
     padding: 10px;
     background-color: #f0f0f0;
     border-bottom: 1px solid #ccc;
     display: flex;
     gap: 10px;
-    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    flex-wrap: wrap;
 }
 
-.tool-button, .rule-button {
+.tool-button, .rule-button, .back-button {
     padding: 8px 15px;
     font-size: 14px;
     text-align: center;
@@ -38,35 +85,24 @@ body {
     border-radius: 4px;
     display: inline-flex;
     align-items: center;
-    gap: 8px; /* Re-added gap for consistent spacing */
+    gap: 8px;
 }
 
-.tool-button {
-    min-width: 40px; /* Minimum width for icon only */
-    transition: width 0.3s ease; /* Smooth transition for width */
-    justify-content: center; /* Center content when only icon */
-}
-
-.rule-button {
-    min-width: 60px; /* Ensure minimum width for text buttons */
-    justify-content: center; /* Center text */
-}
-
-.tool-button span {
-    max-width: 0; /* Hide text by default */
+.tool-button span, .back-button span {
+    max-width: 0;
     opacity: 0;
-    overflow: hidden; /* Ensure text is hidden */
-    white-space: nowrap; /* Prevent text wrapping */
-    transition: max-width 0.3s ease, opacity 0.3s ease; /* Smooth transition for text */
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.3s ease, opacity 0.3s ease;
 }
 
-.tool-button:hover, .tool-button.active {
-    width: auto; /* Expand width on hover or when active */
+.tool-button:hover, .tool-button.active, .back-button:hover {
+    width: auto;
 }
 
-.tool-button:hover span, .tool-button.active span {
-    max-width: 100px; /* Show text on hover or when active (adjust as needed) */
-    opacity: 1; /* Make text visible */
+.tool-button:hover span, .tool-button.active span, .back-button:hover span {
+    max-width: 100px;
+    opacity: 1;
 }
 
 .tool-button.active, .rule-button.active {
@@ -76,11 +112,11 @@ body {
 
 .panel {
     flex: 1;
-    border: 2px solid #ccc; /* Increased border thickness and color */
+    border: 2px solid #ccc;
     margin: 5px;
     background-color: #f9f9f9;
-    position: relative; /* For vis.js canvas */
-    min-height: 0; /* Helps flexbox calculate shrinking sizes correctly */
+    position: relative;
+    min-height: 0;
 }
 
 .description-display {
@@ -91,14 +127,36 @@ body {
     border-radius: 4px;
     font-size: 0.9em;
     color: #555;
-    min-height: 20px; /* Ensure some height even if empty */
+    min-height: 20px;
     display: flex;
     align-items: center;
 }
 
-/* Vis.js specific styles */
 .vis-network {
     width: 100%;
     height: 100%;
-    border: none; /* Remove default vis.js border */
+    border: none;
+}
+
+.vis-network canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#m-step-controls, #p-comp-controls, 
+#competitive-m-step-controls, #competitive-p-comp-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#m-step-input, #p-comp-input,
+#competitive-m-step-input, #competitive-p-comp-input {
+    width: 40px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
