@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'add-edge': 'Click two vertices to create an arc.',
             'generate-random': 'Generate a random acyclic digraph.',
             'generate-tournament': 'Generate a (multipartite) tournament.',
+            'generate-sequence': 'Generate a circulant digraph from a sequence.',
             'delete': 'Click a vertex or arc to delete it.',
             'clear': 'Clear all graph data.',
             'import': 'Load graph data from a JSON file.',
@@ -155,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     rules[currentUndirectedRule](currentNodes, currentEdges);
                 }
+                rightNetwork.fit();
             }
         };
 
@@ -182,6 +184,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (toolId === 'generate-tournament-button') {
                     generateTournament();
+                    return;
+                }
+                if (toolId === 'generate-sequence-button') {
+                    const nStr = prompt("Enter the number of vertices (n):");
+                    if (nStr === null) return;
+                    const n = parseInt(nStr, 10);
+                    if (isNaN(n) || n <= 0) return alert("Invalid number of vertices.");
+
+                    const seqStr = prompt("Enter the sequence as comma-separated numbers (e.g., 1,3,4):");
+                    if (seqStr === null) return;
+                    const sequence = seqStr.split(',').map(s => parseInt(s.trim(), 10));
+                    if (sequence.some(isNaN) || sequence.some(s => s <= 0)) return alert('Invalid sequence. Please use positive, comma-separated numbers.');
+
+                    generateSequenceGraph(n, sequence);
                     return;
                 }
 
@@ -243,6 +259,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 newNodes.push({ id: i, label: `v${i+1}`, x: radius * Math.cos(angle), y: radius * Math.sin(angle) });
             }
             leftNodes.add(newNodes);
+            leftNetwork.fit();
+        };
+
+        const generateSequenceGraph = (n, sequence) => {
+            leftNodes.clear();
+            leftEdges.clear();
+            nodeCounter = 1;
+            const newNodes = [];
+            const newEdges = [];
+            const radius = leftContainer.clientWidth / 3;
+
+            // Create nodes in a circle
+            for (let i = 0; i < n; i++) {
+                const angle = (i / n) * 2 * Math.PI;
+                newNodes.push({ id: i, label: `v${i}`, x: radius * Math.cos(angle), y: radius * Math.sin(angle) });
+            }
+
+            // Create arcs based on the sequence
+            for (let i = 0; i < n; i++) {
+                sequence.forEach(a_j => {
+                    const targetNodeId = (i + a_j) % n;
+                    newEdges.push({ from: i, to: targetNodeId, arrows: 'to' });
+                });
+            }
+
+            leftNodes.add(newNodes);
+            leftEdges.add(newEdges);
             leftNetwork.fit();
         };
 
