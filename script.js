@@ -622,6 +622,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set initial descriptions
         if (toolDescriptionDisplay) updateToolDescription(currentTool);
         if (ruleDescriptionDisplay) updateRuleDescription(currentUndirectedRule);
+
+        // Set defaults for competitive page
+        if (name === 'competitive') {
+            // Set the default rule to p-comp for the competitive instance
+            currentUndirectedRule = 'p-comp';
+            // Update the UI to reflect this default state
+            const pCompButton = document.getElementById(id('rule-p-comp-button'));
+            if(pCompButton) {
+                // De-activate other buttons if any were active by default in HTML
+                document.querySelectorAll(`#${id('rule-selection-toolbar')} .rule-button`).forEach(btn => btn.classList.remove('active'));
+                pCompButton.classList.add('active');
+            }
+            if (pCompControls) pCompControls.style.display = 'inline-block';
+            updateRuleDescription(currentUndirectedRule);
+        }
     };
 
     // --- Create Instances ---
