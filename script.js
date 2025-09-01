@@ -116,6 +116,182 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 }
+            },
+            'ce': (nodes, edges) => {
+                undirectedNodes.clear();
+                undirectedEdges.clear();
+                nodes.forEach(node => undirectedNodes.add(node));
+                const inNeighbors = new Map();
+                edges.forEach(edge => {
+                    if (!inNeighbors.has(edge.to)) inNeighbors.set(edge.to, new Set());
+                    inNeighbors.get(edge.to).add(edge.from);
+                });
+                const nodeIds = nodes.map(node => node.id);
+                for (let i = 0; i < nodeIds.length; i++) {
+                    for (let j = i + 1; j < nodeIds.length; j++) {
+                        const nodeAId = nodeIds[i];
+                        const nodeBId = nodeIds[j];
+                        const inA = inNeighbors.get(nodeAId) || new Set();
+                        const inB = inNeighbors.get(nodeBId) || new Set();
+                        for (const neighbor of inA) {
+                            if (inB.has(neighbor)) {
+                                const edgeId = `graph-${Math.min(nodeAId, nodeBId)}-${Math.max(nodeAId, nodeBId)}`;
+                                if (!undirectedEdges.get(edgeId)) {
+                                    undirectedEdges.add({ id: edgeId, from: nodeAId, to: nodeBId });
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            },
+            'cce': (nodes, edges) => {
+                undirectedNodes.clear();
+                undirectedEdges.clear();
+                nodes.forEach(node => undirectedNodes.add(node));
+                const outNeighbors = new Map();
+                edges.forEach(edge => {
+                    if (!outNeighbors.has(edge.from)) outNeighbors.set(edge.from, new Set());
+                    outNeighbors.get(edge.from).add(edge.to);
+                });
+                const inNeighbors = new Map();
+                edges.forEach(edge => {
+                    if (!inNeighbors.has(edge.to)) inNeighbors.set(edge.to, new Set());
+                    inNeighbors.get(edge.to).add(edge.from);
+                });
+                const nodeIds = nodes.map(node => node.id);
+                for (let i = 0; i < nodeIds.length; i++) {
+                    for (let j = i + 1; j < nodeIds.length; j++) {
+                        const nodeAId = nodeIds[i];
+                        const nodeBId = nodeIds[j];
+                        let hasCommonOut = false;
+                        const outA = outNeighbors.get(nodeAId) || new Set();
+                        const outB = outNeighbors.get(nodeBId) || new Set();
+                        for (const neighbor of outA) { if (outB.has(neighbor)) { hasCommonOut = true; break; } }
+                        let hasCommonIn = false;
+                        const inA = inNeighbors.get(nodeAId) || new Set();
+                        const inB = inNeighbors.get(nodeBId) || new Set();
+                        for (const neighbor of inA) { if (inB.has(neighbor)) { hasCommonIn = true; break; } }
+                        if (hasCommonIn && hasCommonOut) {
+                            const edgeId = `graph-${Math.min(nodeAId, nodeBId)}-${Math.max(nodeAId, nodeBId)}`;
+                            if (!undirectedEdges.get(edgeId)) {
+                                undirectedEdges.add({ id: edgeId, from: nodeAId, to: nodeBId });
+                            }
+                        }
+                    }
+                }
+            },
+            'niche': (nodes, edges) => {
+                undirectedNodes.clear();
+                undirectedEdges.clear();
+                nodes.forEach(node => undirectedNodes.add(node));
+                const outNeighbors = new Map();
+                edges.forEach(edge => {
+                    if (!outNeighbors.has(edge.from)) outNeighbors.set(edge.from, new Set());
+                    outNeighbors.get(edge.from).add(edge.to);
+                });
+                const inNeighbors = new Map();
+                edges.forEach(edge => {
+                    if (!inNeighbors.has(edge.to)) inNeighbors.set(edge.to, new Set());
+                    inNeighbors.get(edge.to).add(edge.from);
+                });
+                const nodeIds = nodes.map(node => node.id);
+                for (let i = 0; i < nodeIds.length; i++) {
+                    for (let j = i + 1; j < nodeIds.length; j++) {
+                        const nodeAId = nodeIds[i];
+                        const nodeBId = nodeIds[j];
+                        let hasCommonOut = false;
+                        const outA = outNeighbors.get(nodeAId) || new Set();
+                        const outB = outNeighbors.get(nodeBId) || new Set();
+                        for (const neighbor of outA) { if (outB.has(neighbor)) { hasCommonOut = true; break; } }
+                        let hasCommonIn = false;
+                        const inA = inNeighbors.get(nodeAId) || new Set();
+                        const inB = inNeighbors.get(nodeBId) || new Set();
+                        for (const neighbor of inA) { if (inB.has(neighbor)) { hasCommonIn = true; break; } }
+                        if (hasCommonIn || hasCommonOut) {
+                            const edgeId = `graph-${Math.min(nodeAId, nodeBId)}-${Math.max(nodeAId, nodeBId)}`;
+                            if (!undirectedEdges.get(edgeId)) {
+                                undirectedEdges.add({ id: edgeId, from: nodeAId, to: nodeBId });
+                            }
+                        }
+                    }
+                }
+            },
+            'phy': (nodes, edges) => {
+                undirectedNodes.clear();
+                undirectedEdges.clear();
+                nodes.forEach(node => undirectedNodes.add(node));
+                const outNeighbors = new Map();
+                edges.forEach(edge => {
+                    if (!outNeighbors.has(edge.from)) outNeighbors.set(edge.from, new Set());
+                    outNeighbors.get(edge.from).add(edge.to);
+                });
+                const nodeIds = nodes.map(node => node.id);
+                for (let i = 0; i < nodeIds.length; i++) {
+                    for (let j = i + 1; j < nodeIds.length; j++) {
+                        const nodeAId = nodeIds[i];
+                        const nodeBId = nodeIds[j];
+                        let hasCommonOut = false;
+                        const outA = outNeighbors.get(nodeAId) || new Set();
+                        const outB = outNeighbors.get(nodeBId) || new Set();
+                        for (const neighbor of outA) { if (outB.has(neighbor)) { hasCommonOut = true; break; } }
+                        let hasDirectArc = false;
+                        edges.forEach(edge => {
+                            if ((edge.from === nodeAId && edge.to === nodeBId) || (edge.from === nodeBId && edge.to === nodeAId)) {
+                                hasDirectArc = true;
+                            }
+                        });
+                        if (hasCommonOut || hasDirectArc) {
+                            const edgeId = `graph-${Math.min(nodeAId, nodeBId)}-${Math.max(nodeAId, nodeBId)}`;
+                            if (!undirectedEdges.get(edgeId)) {
+                                undirectedEdges.add({ id: edgeId, from: nodeAId, to: nodeBId });
+                            }
+                        }
+                    }
+                }
+            },
+            'm-step': (nodes, edges, m) => {
+                undirectedNodes.clear();
+                undirectedEdges.clear();
+                nodes.forEach(node => undirectedNodes.add(node));
+                const adj = new Map();
+                edges.forEach(edge => {
+                    if (!adj.has(edge.from)) adj.set(edge.from, new Set());
+                    adj.get(edge.from).add(edge.to);
+                });
+                function findReachableNodes(startNode, steps) {
+                    let currentLevel = new Set([startNode]);
+                    for (let i = 0; i < steps; i++) {
+                        let nextLevel = new Set();
+                        for (const node of currentLevel) {
+                            const neighbors = adj.get(node);
+                            if (neighbors) {
+                                neighbors.forEach(neighbor => nextLevel.add(neighbor));
+                            }
+                        }
+                        currentLevel = nextLevel;
+                        if (currentLevel.size === 0) break;
+                    }
+                    return currentLevel;
+                }
+                const nodeIds = nodes.map(node => node.id);
+                for (let i = 0; i < nodeIds.length; i++) {
+                    for (let j = i + 1; j < nodeIds.length; j++) {
+                        const nodeAId = nodeIds[i];
+                        const nodeBId = nodeIds[j];
+                        const reachableA = findReachableNodes(nodeAId, m);
+                        const reachableB = findReachableNodes(nodeBId, m);
+                        for (const node of reachableA) {
+                            if (reachableB.has(node)) {
+                                const edgeId = `graph-${Math.min(nodeAId, nodeBId)}-${Math.max(nodeAId, nodeBId)}`;
+                                if (!undirectedEdges.get(edgeId)) {
+                                    undirectedEdges.add({ id: edgeId, from: nodeAId, to: nodeBId });
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         };
 
@@ -176,6 +352,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (toolId === 'import-button') {
                     importFileInput.click();
+                    return;
+                }
+                if (toolId === 'export-button') {
+                    const data = {
+                        nodes: leftNodes.get(),
+                        edges: leftEdges.get(),
+                        rule: currentUndirectedRule
+                    };
+                    const jsonStr = JSON.stringify(data, null, 2);
+                    const blob = new Blob([jsonStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'graph-export.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
                     return;
                 }
                 if (toolId === 'generate-random-button') {
@@ -242,8 +436,89 @@ document.addEventListener('DOMContentLoaded', () => {
         leftNodes.on('add', (e, p) => undirectedNodes.add(leftNodes.get(p.items)));
         leftNodes.on('remove', (e, p) => undirectedNodes.remove(p.items));
 
-        if (mStepInput) mStepInput.addEventListener('change', updateUndirectedGraphDisplay);
         if (pCompInput) pCompInput.addEventListener('change', updateUndirectedGraphDisplay);
+
+        if (importFileInput) {
+            importFileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result;
+                    if (file.name.endsWith('.json')) {
+                        importFromJSON(content);
+                    } else if (file.name.endsWith('.csv')) {
+                        importFromCSV(content);
+                    } else {
+                        alert('Unsupported file type. Please select a .json or .csv file.');
+                    }
+                    importFileInput.value = ''; // Reset file input
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        const importFromJSON = (jsonStr) => {
+            try {
+                const data = JSON.parse(jsonStr);
+                leftNodes.clear();
+                leftEdges.clear();
+                leftNodes.add(data.nodes || []);
+                leftEdges.add(data.edges || []);
+                if (data.rule) {
+                    const ruleButton = document.getElementById(id(`rule-${data.rule}-button`));
+                    if (ruleButton) ruleButton.click();
+                }
+                leftNetwork.fit();
+            } catch (error) {
+                alert("Invalid JSON file.");
+                console.error("Error parsing JSON file:", error);
+            }
+        };
+
+        const importFromCSV = (csvStr) => {
+            try {
+                const matrix = csvStr.trim().split('\n').map(row => row.split(',').map(val => parseInt(val.trim(), 10)));
+                
+                // Validation
+                const n = matrix.length;
+                if (n === 0) throw new Error("CSV is empty.");
+                if (!matrix.every(row => row.length === n && row.every(val => !isNaN(val)))) {
+                    throw new Error("CSV must be a square matrix of numbers.");
+                }
+
+                leftNodes.clear();
+                leftEdges.clear();
+                nodeCounter = 1;
+                const newNodes = [];
+                const newEdges = [];
+                const radius = leftContainer.clientWidth / 3;
+
+                // Create nodes in a circle (clockwise from positive x-axis)
+                for (let i = 0; i < n; i++) {
+                    const angle = - (i / n) * 2 * Math.PI; // Negative for clockwise
+                    newNodes.push({ id: i, label: `v${i}`, x: radius * Math.cos(angle), y: radius * Math.sin(angle) });
+                }
+
+                // Create arcs from matrix
+                for (let i = 0; i < n; i++) {
+                    for (let j = 0; j < n; j++) {
+                        if (matrix[i][j] === 1) {
+                            newEdges.push({ from: i, to: j, arrows: 'to' });
+                        }
+                    }
+                }
+
+                leftNodes.add(newNodes);
+                leftEdges.add(newEdges);
+                leftNetwork.fit();
+
+            } catch (error) {
+                alert(`Error processing CSV file: ${error.message}`);
+                console.error("Error processing CSV file:", error);
+            }
+        };
 
         const generateRandomGraph = () => {
             const numNodesStr = prompt("Enter the number of vertices:", "5");
